@@ -1,0 +1,85 @@
+<!--
+AI AGENT METADATA:
+@purpose: Centralize brand identity guidelines, assets, and voice/tone standards.
+@audience: Designers, frontend developers, AI agents generating UI/content
+@format: Directory of brand resources
+@required_sections: Brand Assets, Color Palette, Typography, Voice & Tone
+@related_files: ["biased/docs/branding/brand-guide-template.md", "biased/intent/intent.md (brand aligns with intent)"]
+@update_frequency: Update when brand guidelines change
+@instructions: AI agents should use these guidelines when generating text (voice/tone) or UI components (colors/typography).
+-->
+
+# Branding Guidelines
+
+This folder contains brand identity and style guidelines for biased-cms.
+
+## What to Include
+
+### Brand Identity
+- Logo files and usage guidelines
+- Brand story and positioning
+- Mission, vision, and values
+- Brand personality and voice
+
+### Visual Guidelines
+- Color palette (primary, secondary, accent colors)
+- Typography (fonts, sizes, hierarchy)
+- Iconography and imagery style
+- Spacing and layout principles
+
+### Voice and Tone
+- Writing style guide
+- Tone for different contexts
+- Messaging frameworks
+- Do's and don'ts
+
+### Usage Examples
+- Correct and incorrect logo usage
+- Color combinations
+- Typography in practice
+- Sample layouts
+
+## Template
+
+Create a `brand-guide.md` file with the following structure:
+
+```markdown
+# Brand Guide: biased-cms
+
+## Brand Identity
+- **Mission**: [Your mission statement]
+- **Vision**: [Your vision statement]
+- **Values**: [Core values]
+
+## Visual Identity
+
+### Colors
+- Primary: #XXXXXX
+- Secondary: #XXXXXX
+- Accent: #XXXXXX
+
+### Typography
+- Headings: [Font family]
+- Body: [Font family]
+- Monospace: [Font family]
+
+### Logo
+[Description of logo usage, variations, minimum sizes, clear space]
+
+## Voice and Tone
+- **Personality**: [Brand personality traits]
+- **Voice**: [How you always sound]
+- **Tone**: [How you adapt to context]
+
+## Examples
+[Include examples of correct brand application]
+```
+
+## Files to Add
+
+- `brand-guide.md` - Main brand guidelines
+- `logo/` - Logo files in various formats
+- `colors.md` - Detailed color specifications
+- `typography.md` - Font usage and hierarchy
+- `voice-tone.md` - Writing and communication guidelines
+- `examples/` - Visual examples and templates

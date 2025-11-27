@@ -1,0 +1,47 @@
+{
+    "_ai_metadata": {
+        "purpose": "Dashboard display configuration. Defines thresholds, goals, and alert settings for BIASED dashboard.",
+        "schema_version": "1.0",
+        "required_fields": [
+            "thresholds",
+            "display",
+            "alerts"
+        ],
+        "related_files": [
+            "biased/metrics/metrics-hook.json",
+            "biased/intent/intent.md",
+            "biased/metrics/definitions.md"
+        ],
+        "instructions": "AI agents should update thresholds to match intent.md success metrics. Configure alerts to notify on metric degradation."
+    },
+    "thresholds": {
+        "behaviorAccuracy": {
+            "min": 0.9,
+            "target": 0.99
+        },
+        "hallucinationRate": {
+            "max": 0.05,
+            "target": 0.0
+        },
+        "latencyMs": {
+            "max": 2000,
+            "target": 500
+        },
+        "costPerRequestUsd": {
+            "max": 0.10,
+            "target": 0.01
+        }
+    },
+    "display": {
+        "showCharts": true,
+        "historyLengthDays": 30,
+        "refreshRateSeconds": 300
+    },
+    "alerts": {
+        "enabled": true,
+        "channels": [
+            "email",
+            "slack"
+        ]
+    }
+}
