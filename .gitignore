@@ -22,3 +22,21 @@ dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Next.js
+.next/
+out/
+
+# Strapi
+.tmp/
+.cache/
+public/uploads/
+database/*.db
+exports/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+*.tfplan
