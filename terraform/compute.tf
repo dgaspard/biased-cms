@@ -1,11 +1,37 @@
+#
+# Assumed dependencies (Service Accounts)
+# IMPORTANT: These service accounts are required to run the containers 
+# and grant specific permissions (like invoker roles)
+#
+resource "google_service_account" "frontend_sa" {
+  account_id   = "${var.environment}-frontend-sa"
+  display_name = "Frontend Cloud Run Service Account"
+}
+
+resource "google_service_account" "cms_sa" {
+  account_id   = "${var.environment}-cms-sa"
+  display_name = "CMS Cloud Run Service Account"
+}
+
+# --- 1. FRONTEND CLOUD RUN SERVICE (Public Access) ---
+
 resource "google_cloud_run_v2_service" "frontend" {
   name     = "${var.environment}-frontend"
   location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
+    # ✅ BEST PRACTICE: Assign a dedicated service account to the running container
+    service_account = google_service_account.frontend_sa.email
+
     containers {
       image = "us-central1-docker.pkg.dev/${var.project_id}/app/frontend:latest"
+      
+      # Optional: Explicitly define the default port (8080 for many web frameworks)
+      ports {
+        container_port = 8080 
+      }
+      
       resources {
         limits = {
           cpu    = "1000m"
@@ -14,6 +40,7 @@ resource "google_cloud_run_v2_service" "frontend" {
       }
       env {
         name  = "NEXT_PUBLIC_API_URL"
+        # The frontend calls the private CMS service via its URI
         value = google_cloud_run_v2_service.cms.uri
       }
     }
@@ -22,27 +49,44 @@ resource "google_cloud_run_v2_service" "frontend" {
       max_instance_count = 5
     }
     vpc_access {
-      connector = google_vpc_access_connector.connector.id
+      # The connector ID must be defined in the context where this file runs
+      connector = google_vpc_access_connector.connector.id 
       egress    = "ALL_TRAFFIC"
     }
   }
 }
 
+# 1a. IAM Policy to make the Frontend publicly accessible
 resource "google_cloud_run_v2_service_iam_member" "public_access" {
-  service  = google_cloud_run_v2_service.frontend.name
+  # ✅ FIX: This resource name is now unique and grants public access to the FRONTEND
+  name     = google_cloud_run_v2_service.frontend.name
   location = google_cloud_run_v2_service.frontend.location
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
 
+
+# --- 2. CMS CLOUD RUN SERVICE (Private Access) ---
+
 resource "google_cloud_run_v2_service" "cms" {
   name     = "${var.environment}-cms"
   location = var.region
-  ingress  = "INGRESS_TRAFFIC_ALL"
+  # ✅ FIX: Restrict ingress to internal traffic only for the backend
+  ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY" 
+  deletion_protection = false
 
   template {
+    # ✅ FIX: Assign the dedicated CMS service account
+    service_account = google_service_account.cms_sa.email 
+    
     containers {
       image = "us-central1-docker.pkg.dev/${var.project_id}/app/cms:latest"
+      
+      # ✅ FIX: Explicitly set the port to 1337 for Strapi
+      ports {
+        container_port = 1337
+      }
+      
       resources {
         limits = {
           cpu    = "1000m"
@@ -50,9 +94,10 @@ resource "google_cloud_run_v2_service" "cms" {
         }
       }
       env {
-        name  = "DATABASE_CLIENT"
-        value = "postgres"
+        name  = "NODE_ENV"
+        value = "production"
       }
+      # Database connection env vars
       env {
         name  = "DATABASE_HOST"
         value = google_sql_database_instance.instance.private_ip_address
@@ -78,7 +123,7 @@ resource "google_cloud_run_v2_service" "cms" {
           }
         }
       }
-      # Add other secrets similarly (JWT, Keys, etc.)
+      # Secret env vars (JWT, APP_KEYS, etc.)
       env {
         name = "JWT_SECRET"
         value_source {
@@ -131,7 +176,35 @@ resource "google_cloud_run_v2_service" "cms" {
     }
     vpc_access {
       connector = google_vpc_access_connector.connector.id
-      egress    = "PRIVATE_RANGES_ONLY"
+      # egress is PRIVATE_RANGES_ONLY to talk to the SQL instance on its private IP
+      egress    = "PRIVATE_RANGES_ONLY" 
     }
+  }
+}
+
+# 2a. IAM Policy to allow the FRONTEND to call the private CMS
+resource "google_cloud_run_v2_service_iam_member" "frontend_cms_invoker" {
+  name     = google_cloud_run_v2_service.cms.name
+  location = google_cloud_run_v2_service.cms.location
+  role     = "roles/run.invoker"
+  # ✅ FIX: Grant the frontend service account the ability to invoke the CMS service
+  member   = "serviceAccount:${google_service_account.frontend_sa.email}"
+}
+
+# NOTE: The redundant and contradicting public access IAM member for "cms" 
+# was intentionally removed from the original configuration.
+
+# --- 3. DOMAIN MAPPING ---
+
+resource "google_cloud_run_domain_mapping" "default" {
+  location = var.region
+  name     = "biasedframework.dev"
+
+  metadata {
+    namespace = var.project_id
+  }
+
+  spec {
+    route_name = google_cloud_run_v2_service.frontend.name
   }
 }

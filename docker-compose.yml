@@ -3,6 +3,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      target: dev
     command: npm run dev
     volumes:
       - ./frontend:/app
@@ -19,6 +20,7 @@ services:
     build:
       context: ./cms
       dockerfile: Dockerfile
+      target: dev
     command: npm run develop
     volumes:
       - ./cms:/app

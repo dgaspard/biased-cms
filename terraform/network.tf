@@ -27,8 +27,10 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 
 # Serverless VPC Access Connector
 resource "google_vpc_access_connector" "connector" {
-  name          = "${var.environment}-conn"
-  region        = var.region
-  ip_cidr_range = "10.8.0.0/28"
-  network       = google_compute_network.vpc.name
+  name           = "${var.environment}-conn"
+  region         = var.region
+  ip_cidr_range  = "10.8.0.0/28"
+  network        = google_compute_network.vpc.name
+  min_throughput = 200
+  max_throughput = 300
 }

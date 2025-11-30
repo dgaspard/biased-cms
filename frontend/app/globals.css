@@ -1,26 +1,48 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand Palette */
+  --color-primary: #3B7B4B;      /* Dark Green */
+  --color-secondary: #6BA357;    /* Light Green */
+  --color-accent: #E5A83D;       /* Golden Yellow */
+  --color-warning: #BF5B3D;      /* Terracotta */
+  --color-teal: #3F6E7B;         /* Dark Teal */
+  
+  /* Text & Background */
+  --background: #F8F8F8;
+  --foreground: #2D2D2D;
+  --text-secondary: #5A5A5A;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-warning: var(--color-warning);
+  --color-teal: var(--color-teal);
+  --color-text-secondary: var(--text-secondary);
+
+  --font-sans: var(--font-open-sans);
+  --font-body: var(--font-lato);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    /* Adjust brand colors for dark mode if needed, keeping defaults for now */
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
 }

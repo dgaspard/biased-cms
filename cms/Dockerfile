@@ -21,6 +21,14 @@ COPY . .
 ENV NODE_ENV production
 RUN npm run build
 
+# Development image
+FROM base AS dev
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ENV NODE_ENV development
+CMD ["npm", "run", "develop"]
+
 # Production image, copy all the files and run strapi
 FROM base AS runner
 WORKDIR /app

@@ -78,12 +78,12 @@ data "google_compute_default_service_account" "default" {
 
 resource "google_secret_manager_secret_iam_member" "secret_access" {
   for_each = toset([
-    google_secret_manager_secret.db_password.id,
-    google_secret_manager_secret.jwt_secret.id,
-    google_secret_manager_secret.admin_jwt_secret.id,
-    google_secret_manager_secret.app_keys.id,
-    google_secret_manager_secret.api_token_salt.id,
-    google_secret_manager_secret.transfer_token_salt.id,
+    "db-password",
+    "jwt-secret",
+    "admin-jwt-secret",
+    "app-keys",
+    "api-token-salt",
+    "transfer-token-salt",
   ])
   secret_id = each.value
   role      = "roles/secretmanager.secretAccessor"
