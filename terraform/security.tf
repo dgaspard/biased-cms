@@ -87,5 +87,10 @@ resource "google_secret_manager_secret_iam_member" "secret_access" {
   ])
   secret_id = each.value
   role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${data.google_compute_default_service_account.default.email}"
+  member    = "serviceAccount:${google_service_account.cms_sa.email}"
+}
+resource "google_project_iam_member" "cms_cloudsql_client" {
+  project = var.project_id
+  role    = "roles/cloudsql.client"
+  member  = "serviceAccount:${google_service_account.cms_sa.email}"
 }

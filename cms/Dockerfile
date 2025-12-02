@@ -19,6 +19,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NODE_ENV production
+RUN npx tsc
 RUN npm run build
 
 # Development image
@@ -40,6 +41,7 @@ RUN adduser --system --uid 1001 strapi
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/dist/config ./config
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/favicon.png ./favicon.png
@@ -50,4 +52,4 @@ USER strapi
 
 EXPOSE 1337
 
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npm run start"]

@@ -19,6 +19,7 @@ resource "google_cloud_run_v2_service" "frontend" {
   name     = "${var.environment}-frontend"
   location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
+  deletion_protection = false
 
   template {
     # ✅ BEST PRACTICE: Assign a dedicated service account to the running container
@@ -97,6 +98,10 @@ resource "google_cloud_run_v2_service" "cms" {
         name  = "NODE_ENV"
         value = "production"
       }
+      env {
+        name  = "DATABASE_CLIENT"
+        value = "postgres"
+      }
       # Database connection env vars
       env {
         name  = "DATABASE_HOST"
@@ -105,6 +110,10 @@ resource "google_cloud_run_v2_service" "cms" {
       env {
         name  = "DATABASE_PORT"
         value = "5432"
+      }
+      env {
+        name  = "DATABASE_SSL"
+        value = "false"
       }
       env {
         name  = "DATABASE_NAME"
