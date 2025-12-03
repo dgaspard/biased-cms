@@ -1,0 +1,21 @@
+{
+  "kind": "singleType",
+  "collectionName": "whatswrongwithagilepractices",
+  "info": {
+    "singularName": "whatswrongwithagile",
+    "pluralName": "whatswrongwithagilepractices",
+    "displayName": "What's wrong with today's agile practices? "
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "Body": {
+      "type": "blocks"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "kind": "singleType",
+  "collectionName": "getting_starteds",
+  "info": {
+    "singularName": "getting-started",
+    "pluralName": "getting-starteds",
+    "displayName": "Getting started"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {}
+}

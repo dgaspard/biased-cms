@@ -200,13 +200,7 @@ resource "google_cloud_run_v2_service_iam_member" "frontend_cms_invoker" {
   member   = "serviceAccount:${google_service_account.frontend_sa.email}"
 }
 
-# 2b. IAM Policy to allow public access to CMS (Strapi has its own auth)
-resource "google_cloud_run_v2_service_iam_member" "cms_admin_access" {
-  name     = google_cloud_run_v2_service.cms.name
-  location = google_cloud_run_v2_service.cms.location
-  role     = "roles/run.invoker"
-  member   = "allUsers"
-}
+
 
 # --- 3. DOMAIN MAPPING ---
 

@@ -1,4 +1,14 @@
 {
+  "workspaces": [
+    "cms",
+    "frontend"
+  ],
+  "scripts": {
+    "build": "npm run build -w cms",
+    "develop": "npm run develop -w cms",
+    "deploy": "npm run deploy -w cms",
+    "strapi": "npm run strapi -w cms"
+  },
   "dependencies": {
     "biased-cli": "^0.4.1"
   }

@@ -1,0 +1,14 @@
+{
+  "kind": "singleType",
+  "collectionName": "install_the_clis",
+  "info": {
+    "singularName": "install-the-cli",
+    "pluralName": "install-the-clis",
+    "displayName": "Install the CLI"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {}
+}
