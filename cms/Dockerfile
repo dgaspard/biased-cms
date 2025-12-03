@@ -46,6 +46,9 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/favicon.png ./favicon.png
 
+RUN mkdir -p /app/node_modules/@strapi/admin/dist/server/server && \
+    ln -s /app/dist/build /app/node_modules/@strapi/admin/dist/server/server/build
+
 RUN chown -R strapi:strapi /app
 
 USER strapi

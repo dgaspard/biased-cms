@@ -7,6 +7,7 @@ export default ({ env }) => {
   console.log('[DB CONFIG] DATABASE_CLIENT =', client);
   console.log('[DB CONFIG] NODE_ENV =', process.env.NODE_ENV);
 
+  // SQLite for local development
   if (client === 'sqlite') {
     return {
       connection: {
@@ -19,7 +20,7 @@ export default ({ env }) => {
     };
   }
 
-  // PostgreSQL configuration
+  // PostgreSQL for production
   return {
     connection: {
       client: 'postgres',
@@ -29,12 +30,10 @@ export default ({ env }) => {
         database: env('DATABASE_NAME'),
         user: env('DATABASE_USERNAME'),
         password: env('DATABASE_PASSWORD'),
-        ssl: env.bool('DATABASE_SSL', true)
+        // SSL: false for Cloud SQL private IP, true for public IP
+        ssl: env.bool('DATABASE_SSL', false)
           ? {
-            rejectUnauthorized: env.bool(
-              'DATABASE_SSL_REJECT_UNAUTHORIZED',
-              true
-            ),
+            rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),
           }
           : false,
       },

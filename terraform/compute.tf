@@ -73,7 +73,7 @@ resource "google_cloud_run_v2_service" "cms" {
   name     = "${var.environment}-cms"
   location = var.region
   # ✅ FIX: Restrict ingress to internal traffic only for the backend
-  ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY" 
+  ingress  = "INGRESS_TRAFFIC_ALL" 
   deletion_protection = false
 
   template {
@@ -83,9 +83,9 @@ resource "google_cloud_run_v2_service" "cms" {
     containers {
       image = "us-central1-docker.pkg.dev/${var.project_id}/app/cms:latest"
       
-      # ✅ FIX: Explicitly set the port to 1337 for Strapi
+      # ✅ FIX: Use standard Cloud Run port 8080
       ports {
-        container_port = 1337
+        container_port = 8080
       }
       
       resources {
@@ -200,8 +200,13 @@ resource "google_cloud_run_v2_service_iam_member" "frontend_cms_invoker" {
   member   = "serviceAccount:${google_service_account.frontend_sa.email}"
 }
 
-# NOTE: The redundant and contradicting public access IAM member for "cms" 
-# was intentionally removed from the original configuration.
+# 2b. IAM Policy to allow public access to CMS (Strapi has its own auth)
+resource "google_cloud_run_v2_service_iam_member" "cms_admin_access" {
+  name     = google_cloud_run_v2_service.cms.name
+  location = google_cloud_run_v2_service.cms.location
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
 
 # --- 3. DOMAIN MAPPING ---
 
