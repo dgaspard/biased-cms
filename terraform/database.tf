@@ -6,7 +6,8 @@ resource "google_sql_database_instance" "instance" {
   depends_on = [google_service_networking_connection.private_vpc_connection]
 
   settings {
-    tier = "db-g1-small" # Smallest tier for cost efficiency
+    tier = "db-f1-micro" # Micro tier for cost efficiency (Note: No SLA)
+    availability_type = "ZONAL" # Single zone for cost efficiency
 
     ip_configuration {
       ipv4_enabled    = false

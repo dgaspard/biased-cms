@@ -47,7 +47,7 @@ resource "google_cloud_run_v2_service" "frontend" {
     }
     scaling {
       min_instance_count = 0
-      max_instance_count = 5
+      max_instance_count = 2
     }
     vpc_access {
       # The connector ID must be defined in the context where this file runs
@@ -181,7 +181,7 @@ resource "google_cloud_run_v2_service" "cms" {
     }
     scaling {
       min_instance_count = 0
-      max_instance_count = 3
+      max_instance_count = 1
     }
     vpc_access {
       connector = google_vpc_access_connector.connector.id

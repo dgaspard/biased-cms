@@ -11,5 +11,12 @@
   },
   "dependencies": {
     "biased-cli": "^0.4.1"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.3.0",
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^24.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }
