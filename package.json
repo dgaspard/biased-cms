@@ -7,7 +7,8 @@
     "build": "npm run build -w cms",
     "develop": "npm run develop -w cms",
     "deploy": "npm run deploy -w cms",
-    "strapi": "npm run strapi -w cms"
+    "strapi": "npm run strapi -w cms",
+    "test:e2e": "NODE_OPTIONS='--loader ts-node/esm --experimental-specifier-resolution=node --no-warnings' cucumber-js --require \"biased/e2e/steps/**/*.ts\" \"biased/e2e/features/**/*.feature\""
   },
   "dependencies": {
     "biased-cli": "^0.4.1"
