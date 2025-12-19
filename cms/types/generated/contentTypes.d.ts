@@ -515,6 +515,44 @@ export interface ApiInstallTheCliInstallTheCli extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiIntentSubmissionIntentSubmission
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'intent_submissions';
+  info: {
+    description: 'Tracks intent submissions and their GitHub PRs for idempotency';
+    displayName: 'Intent Submission';
+    pluralName: 'intent-submissions';
+    singularName: 'intent-submission';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    branchName: Schema.Attribute.String & Schema.Attribute.Required;
+    clientRequestId: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    filePath: Schema.Attribute.String & Schema.Attribute.Required;
+    intent: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::intent-submission.intent-submission'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    pullRequestNumber: Schema.Attribute.Integer & Schema.Attribute.Required;
+    pullRequestUrl: Schema.Attribute.String & Schema.Attribute.Required;
+    testCases: Schema.Attribute.Text;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiTheFrameworkTheFramework extends Struct.SingleTypeSchema {
   collectionName: 'the_frameworks';
   info: {
@@ -1085,6 +1123,7 @@ declare module '@strapi/strapi' {
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
       'api::getting-started.getting-started': ApiGettingStartedGettingStarted;
       'api::install-the-cli.install-the-cli': ApiInstallTheCliInstallTheCli;
+      'api::intent-submission.intent-submission': ApiIntentSubmissionIntentSubmission;
       'api::the-framework.the-framework': ApiTheFrameworkTheFramework;
       'api::whatswrongwithagile.whatswrongwithagile': ApiWhatswrongwithagileWhatswrongwithagile;
       'plugin::content-releases.release': PluginContentReleasesRelease;

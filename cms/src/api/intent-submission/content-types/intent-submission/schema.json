@@ -1,0 +1,43 @@
+{
+    "kind": "collectionType",
+    "collectionName": "intent_submissions",
+    "info": {
+        "singularName": "intent-submission",
+        "pluralName": "intent-submissions",
+        "displayName": "Intent Submission",
+        "description": "Tracks intent submissions and their GitHub PRs for idempotency"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "clientRequestId": {
+            "type": "string",
+            "required": true,
+            "unique": true
+        },
+        "pullRequestUrl": {
+            "type": "string",
+            "required": true
+        },
+        "pullRequestNumber": {
+            "type": "integer",
+            "required": true
+        },
+        "branchName": {
+            "type": "string",
+            "required": true
+        },
+        "filePath": {
+            "type": "string",
+            "required": true
+        },
+        "intent": {
+            "type": "text"
+        },
+        "testCases": {
+            "type": "text"
+        }
+    }
+}
