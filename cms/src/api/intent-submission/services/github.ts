@@ -109,6 +109,7 @@ export async function createPullRequest(
 
     try {
         // Step 1: Get base branch SHA
+        console.log(`[GitHub] Using repository: ${owner}/${repo}`);
         console.log(`[GitHub] Getting base branch SHA for ${baseBranch}...`);
         const { data: refData } = await octokit.rest.git.getRef({
             owner,
@@ -175,10 +176,12 @@ export async function createPullRequest(
         };
     } catch (error: any) {
         // Handle GitHub API errors with clear messages
-        if (error.status === 401 || error.status === 403) {
-            throw new Error('GitHub authentication failed. Check GITHUB_TOKEN.');
+        if (error.status === 401) {
+            throw new Error('GitHub authentication failed (401). Your GITHUB_TOKEN is likely invalid or expired.');
+        } else if (error.status === 403) {
+            throw new Error(`GitHub access forbidden (403). Your token is valid but likely missing "Read and write" permissions for "Contents" or "Pull requests". Original error: ${error.message}`);
         } else if (error.status === 404) {
-            throw new Error(`Repository not found. Check GITHUB_OWNER and GITHUB_REPO.`);
+            throw new Error(`Resource not found (404). This usually means either the repository ${owner}/${repo} does not exist, your token lacks access, or the branch '${baseBranch}' does not exist.`);
         } else if (error.status === 403 && error.message?.includes('rate limit')) {
             throw new Error('GitHub API rate limit exceeded. Please try again later.');
         } else if (error.message) {

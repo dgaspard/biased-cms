@@ -5,6 +5,7 @@ export default {
             path: '/intent-submissions',
             handler: 'intent-submission.create',
             config: {
+                auth: false,
                 policies: [],
                 middlewares: [],
             },

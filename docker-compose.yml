@@ -44,6 +44,8 @@ services:
       - API_TOKEN_SALT=somesalt
       - TRANSFER_TOKEN_SALT=anothersalt
       - NODE_ENV=development
+    env_file:
+      - ./cms/.env
     depends_on:
       - postgres
 
